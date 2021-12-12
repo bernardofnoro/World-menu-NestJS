@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cuisine {
+  id            Int         @id @default(autoincrement())
+  country       String
+  flagPic       String?
+  Recipe        Recipe[]
+}
+
+model Gauges {
+  id            Int         @id @default(autoincrement())
+  gauge         String      @db.VarChar(50)
+  description   String      @db.VarChar(50)
+  spice         Spice[]
+  ingredient    Ingredients[]
+  createdAt     DateTime    @default(now()) @map("created_at")
+}
+
+model Spice {
+  id            Int         @id @default(autoincrement())
+  name          String
+  quantity      String?
+  gaugeId       Int?
+  gauge         Gauges?     @relation(fields: [gaugeId], references: [id])
+  spicePic      String?
+  Recipe        Recipe[]
+  createdAt     DateTime    @default(now()) @map("created_at")
+}
+
+model Ingredients {
+  id            Int         @id @default(autoincrement())
+  name          String     
+  quantity      Int?
+  gaugeId       Int?
+  gauge         Gauges?   @relation(fields: [gaugeId], references: [id])
+  ingredientPic String?
+  Recipe        Recipe[]
+  createdAt     DateTime    @default(now()) @map("created_at")
+}
+
+model Recipe {
+  id            Int         @id @default(autoincrement())
+  name          String
+  cuisineId     Int
+  cuisine       Cuisine     @relation(fields: [cuisineId], references: [id])
+  history       String?     @db.VarChar(500)
+  ingredientsId Int
+  ingredient    Ingredients @relation(fields: [ingredientsId], references: [id])
+  spiceId       Int
+  spice         Spice       @relation(fields: [spiceId], references: [id])
+  prepTime      String
+  servings      Int
+  recipePic     String?
+  createdAt     DateTime    @default(now()) @map("created_at")
+}
