@@ -73,5 +73,3 @@ model Recipe {
   recipePic     String?
   createdAt     DateTime    @default(now()) @map("created_at")
 }
-
-
