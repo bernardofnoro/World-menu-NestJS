@@ -10,11 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  pass      String
+  firstname String?
+  lastname  String?
+  createdAt     DateTime    @default(now()) @map("created_at")
+}
+
 model Cuisine {
   id            Int         @id @default(autoincrement())
   country       String
   flagPic       String?
   Recipe        Recipe[]
+  createdAt     DateTime    @default(now()) @map("created_at")
 }
 
 model Gauges {
@@ -63,3 +73,5 @@ model Recipe {
   recipePic     String?
   createdAt     DateTime    @default(now()) @map("created_at")
 }
+
+

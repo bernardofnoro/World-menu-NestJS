@@ -1,4 +1,4 @@
-INSERT INTO "public"."Measures" (measure, description) VALUES ('cs', 'Colher(es) de sopa'),
+INSERT INTO "public"."Gauges" (gauge, description) VALUES ('cs', 'Colher(es) de sopa'),
 ('csb', 'Colher(es) de sobremesa'),
 ('cc', 'Colher(es) de chá'),
 ('ccf', 'Colher(es) de café'),
