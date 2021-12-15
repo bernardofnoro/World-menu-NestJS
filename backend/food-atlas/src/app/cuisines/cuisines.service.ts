@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Cuisine } from '.prisma/client';
 import { PrismaService } from '../../plugins/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../plugins/prisma/prisma.module';
 import { CuisinesController } from './cuisines/cuisines.controller';
@@ -10,9 +11,11 @@ import { RecipesController } from './recipes/recipes.controller';
 import { RecipesService } from './recipes/recipes.service';
 import { SpicesController } from './spices/spices.controller';
 import { SpicesService } from './spices/spices.service';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, UsersModule, AuthModule],
   controllers: [
     CuisinesController,
     IngredientsController,

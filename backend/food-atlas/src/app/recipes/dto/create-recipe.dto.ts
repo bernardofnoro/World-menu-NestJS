@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 export class CreateRecipeDto {
