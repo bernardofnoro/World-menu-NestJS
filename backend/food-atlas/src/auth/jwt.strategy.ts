@@ -2,7 +2,7 @@
  * file: jwt.strategy.ts
  * description: arquivo responsável por fazer a conexão com arquivo 'server.js'
  * data: 15/12/2021
- * author: Bernardo Farias <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
+ * author: Bernardo Freitas <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
  */
 
 import { Injectable } from '@nestjs/common';
