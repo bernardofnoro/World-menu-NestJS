@@ -1,7 +1,13 @@
-/* eslint-disable prettier/prettier */
-import { Injectable } from "@nestjs/common";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
+/**
+ * file: jwt.strategy.ts
+ * description: arquivo responsável por fazer a conexão com arquivo 'server.js'
+ * data: 15/12/2021
+ * author: Bernardo Farias <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
+ */
+
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export interface JwtPayload {
   email: string;
