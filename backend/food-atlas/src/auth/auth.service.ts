@@ -2,7 +2,7 @@
  * file: auth.service.ts
  * description: arquivo responsável pela geração do Token para o processo de Autenticação.
  * data: 15/12/2021
- * author: Bernardo Farias <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
+ * author: Bernardo Freitas <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
  */
 
 import { Injectable } from '@nestjs/common';

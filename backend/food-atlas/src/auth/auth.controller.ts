@@ -2,7 +2,7 @@
  * file: jwt.strategy.ts
  * description: arquivo responsável pela configuração de navegação do usuário no sistema.
  * data: 15/12/2021
- * author: Bernardo Farias <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
+ * author: Bernardo Freitas <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
  */
 
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
