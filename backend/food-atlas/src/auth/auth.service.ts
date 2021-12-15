@@ -1,7 +1,12 @@
-/* eslint-disable prettier/prettier */
+/**
+ * file: auth.service.ts
+ * description: arquivo responsável pela geração do Token para o processo de Autenticação.
+ * data: 15/12/2021
+ * author: Bernardo Farias <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
+ */
+
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 import { UserService } from 'src/app/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from './jwt.strategy';
@@ -17,10 +22,10 @@ export class AuthService {
     const user = await this.userService.findByLogin(loginUserDto);
 
     const token = this._createToken(user);
-        
-    return{ 
+
+    return {
       email: user.email,
-      ...token
+      ...token,
     };
   }
 

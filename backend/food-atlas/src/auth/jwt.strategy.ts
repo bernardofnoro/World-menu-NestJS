@@ -1,6 +1,7 @@
 /**
  * file: jwt.strategy.ts
- * description: arquivo responsável por fazer a conexão com arquivo 'server.js'
+ * description: arquivo responsável pelos parâmetros do usuário necessários para validação
+ * do Token.
  * data: 15/12/2021
  * author: Bernardo Farias <bernardofn@outlook.com> & Chanely Marques <chanelym@gmail.com>
  */
