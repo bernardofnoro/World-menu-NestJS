@@ -66,11 +66,11 @@ Na pasta **src**, faça a remoção destes três arquivos:
 
 Na pasta **src**, crie a pasta **app** e coloque o arquivo **app.modulde.ts** dentro dela. A árvore de arquivos dentro da pasta do projeto deve estar como abaixo:
 
-![image_05](C:\Users\Chanely\Documents\GitHub\understanding-NestJS-PostgreSQL\images\image_05.png)
+![image_05](misc/images/image_05.png)
 
 Observe que temos alguns pontos em **vermelho**, indicando que algo de errado não está certo! Se abrirmos o arquivo `app.modules.ts` e na barra de opções clicarmos em **problemas**, veremos sobre o quê essas reclamações se tratam.
 
-![image_06](C:\Users\Chanely\Documents\GitHub\understanding-NestJS-PostgreSQL\images\image_06.png)
+![image_06](misc/images/image_06.png)
 
 Estes erros se tratam justamente dos arquivos que excluímos e para resolver este problema, removemos as linhas `2, 3, 7 e 8` do código, deixando-o assim:
 
@@ -113,13 +113,13 @@ import { AppModule } from './../src/app/app.module';
 
 `GET` /api/v1/cuisines
 
-`GET` /api/v1/cuisines/:id
+`GET` /api/v1/cuisines/{:id}
 
-`PUT` /api/v1/cuisines/:id
+`PUT` /api/v1/cuisines/{:id}
 
-`PATCH` /api/v1/cuisines/:id
+`PATCH` /api/v1/cuisines/{:id}
 
-`DELETE` /api/v1/cuisines/:id
+`DELETE` /api/v1/cuisines/{:id}
 
 Em **Cuisines** cuidamos das informações a respeito do país de origem do prato/receita.
 
@@ -127,15 +127,15 @@ Em **Cuisines** cuidamos das informações a respeito do país de origem do prat
 
 `GET` /api/v1/ingredients
 
-`GET` /api/v1/ingredients/:id
+`GET` /api/v1/ingredients/{:id}
 
 `POST` /api/v1/ingredients
 
-`PUT` /api/v1/ingredients/:id
+`PUT` /api/v1/ingredients/{:id}
 
-`PATCH` /api/v1/ingredients/:id
+`PATCH` /api/v1/ingredients/{:id}
 
-`DELETE` /api/v1/ingredients/:id
+`DELETE` /api/v1/ingredients/{:id}
 
 Em **Ingredients** cuidamos das informações a respeito dos ingredientes que irão nas receitas/pratos.
 
@@ -143,15 +143,15 @@ Em **Ingredients** cuidamos das informações a respeito dos ingredientes que ir
 
 `GET` /api/v1/gauges
 
-`GET` /api/v1/gauges/:id
+`GET` /api/v1/gauges/{:id}
 
 `POST` /api/v1/gauges
 
-`PUT` /api/v1/gauges/:id
+`PUT` /api/v1/gauges/{:id}
 
-`PATCH` /api/v1/ingredients/:id
+`PATCH` /api/v1/ingredients/{:id}
 
-`DELETE` /api/v1/ingredients/:id
+`DELETE` /api/v1/ingredients/{:id}
 
 Em **Gauges** cuidamos das informações a respeito dos pesos e medidas utilizados para mensurar a confecção de temperos e preparo de ingredientes.
 
@@ -159,15 +159,15 @@ Em **Gauges** cuidamos das informações a respeito dos pesos e medidas utilizad
 
 `GET` /api/v1/recipes
 
-`GET` /api/v1/recipes/:id
+`GET` /api/v1/recipes/{:id}
 
 `POST` /api/v1/recipes
 
-`PUT` /api/v1/recipes/:id
+`PUT` /api/v1/recipes/{:id}
 
-`PATCH` /api/v1/recipes/:id
+`PATCH` /api/v1/recipes/{:id}
 
-`DELETE` /api/v1/recipes/:id
+`DELETE` /api/v1/recipes/{:id}
 
 Em **Recipes** cuidamos das informações a respeito dos pesos e medidas utilizados para mensurar a confecção de temperos e preparo de ingredientes.
 
