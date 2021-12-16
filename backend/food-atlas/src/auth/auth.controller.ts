@@ -12,16 +12,16 @@ import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor( private readonly authService: AuthService ) { }
+  constructor(private readonly authService: AuthService) {}
 
-    @Post()
-    async login(@Body() data: LoginDto) {
-        return this.authService.login(data);
-    }
+  @Post()
+  async login(@Body() data: LoginDto) {
+    return this.authService.login(data);
+  }
 
-    @Get()
-    @UseGuards(AuthGuard())
-    async checkLogin() {
-        return 'logado';
-    }
+  @Get()
+  @UseGuards(AuthGuard())
+  async checkLogin() {
+    return 'PARABENS, SE VOCÊ ESTÁ LENDO ISSO, VOCÊ CONSEGUIU ACESSAR UMA ROTA PROTEGIDA!';
+  }
 }
