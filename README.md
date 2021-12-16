@@ -17,7 +17,7 @@ O Nest possui diversas semelhanças com o **Express** justamente por ter sido co
 
 ## Setup Inicial - NestJS
 
-> **Lembrete: :bangbang:** As instalações abaixo devem ser feitas dentro da pasta do seu projeto, aquela que criou com o comando `nest new nome-do-projeto` exceto o pacote @nestjs/cli
+> **Lembrete: :bangbang:** As instalações das dependências necessárias ao sempre devem ser realizadas dentro da pasta do seu projeto, aquela que irá criar com o comando `nest new nome-do-projeto` exceto o pacote @nestjs/cli, que deve ser instalado um nível anterior para permitir a utilização dos comandos nest.
 
 Para começarmos é necessário criar uma pasta para o projeto. Lembre-se que o nome da pasta não deve:
 
@@ -171,19 +171,55 @@ Em **Gauges** cuidamos das informações a respeito dos pesos e medidas utilizad
 
 Em **Recipes** cuidamos das informações a respeito dos pesos e medidas utilizados para mensurar a confecção de temperos e preparo de ingredientes.
 
+## Entendendo um pouco de relacionamento
+
+(Não, não estamos falando daquele que deveria sério :laughing:)
+
+### Relação Um para Um
+
+![one_to_one](misc/dbSchemas/one_to_one.png)
+
+### Relação Um para Muitos
+
+![one_to_many](misc/dbSchemas/one_to_many.png)
+
+### Relação Muitos para Muitos
+
+![many_to_many](misc/dbSchemas/many_to_many.png)
+
 ## PostgreSQL e Prisma - Uma relação de amor e ódio
 
 (Porque o contrário do amor é a indiferença! :blue_heart: )
 
-## Relação Um pra Um
+**Tabela User**
 
-![one_to_one](misc/dbSchemas/one_to_one.png)
+| Campo     | Tipo   | Observações            | Descrição                       |
+| :-------- | ------ | ---------------------- | ------------------------------- |
+| Id        | String | Chave-primária         | ID da pessoa usuária            |
+| email     | String | Não se repete          | E-mail que servirá de Login     |
+| pass      | String |                        | Senha da pessoa usuária         |
+| firstname | String | Preenchimento opcional | Primeiro nome da pessoa usuária |
+| lastname  | String | Preenchimento opcional | Sobrenome da pessoa usuária     |
 
-## Relação Um pra Muitos
+**Tabela Cuisine**
 
-![one_to_many](misc/dbSchemas/one_to_many.png)
+| Campo   | Tipo   | Observações            | Descrição                       |
+| :------ | ------ | ---------------------- | ------------------------------- |
+| Id      | String | Chave-primária         | ID do país                      |
+| country | String |                        | Nome do país                    |
+| flagPic | String | Preenchimento opcional | Imagem da bandeira do país      |
+| Recipe  |        | Chave-Secundária       | Conexão com a tabela **Recipe** |
 
-## Relação Muitos pra Muitos
+**Tabela Gauges**
 
-![many_to_many](misc/dbSchemas/many_to_many.png)
+| Campo       | Tipo   | Observações      | Descrição                       |
+| :---------- | ------ | ---------------- | ------------------------------- |
+| Id          | String | Chave-primária   | ID da medida                    |
+| gauge       | String |                  | Nome da medida utilizada        |
+| description | String |                  | Detalhes sobre a medida         |
+| Recipe      |        | Chave-Secundária | Conexão com a tabela **Recipe** |
+
+## Autenticação e Autorização com Passport e JWT
+
+(Isso certamente não é coisa de Deus! :fearful:)
 
