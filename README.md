@@ -193,7 +193,7 @@ Em **Auth** realizamos o Login para utilizar o sistema.
 
 | Campo     | Tipo   | Observações            | Descrição                       |
 | :-------- | ------ | ---------------------- | ------------------------------- |
-| Id        | String | Chave-primária         | ID da pessoa usuária            |
+| id        | Int    | Chave-primária         | ID da pessoa usuária            |
 | email     | String | Não se repete          | E-mail que servirá de Login     |
 | pass      | String |                        | Senha da pessoa usuária         |
 | firstname | String | Preenchimento opcional | Primeiro nome da pessoa usuária |
@@ -203,7 +203,7 @@ Em **Auth** realizamos o Login para utilizar o sistema.
 
 | Campo   | Tipo   | Observações            | Descrição                       |
 | :------ | ------ | ---------------------- | ------------------------------- |
-| Id      | String | Chave-primária         | ID do país                      |
+| id      | Int    | Chave-primária         | ID do país                      |
 | country | String |                        | Nome do país                    |
 | flagPic | String | Preenchimento opcional | Imagem da bandeira do país      |
 | Recipe  |        | Chave-Secundária       | Conexão com a tabela **Recipe** |
@@ -462,7 +462,7 @@ INSERT INTO "public"."Cuisine" (country) VALUES ('Ascension Island'),
 
 | Campo       | Tipo   | Observações      | Descrição                       |
 | :---------- | ------ | ---------------- | ------------------------------- |
-| Id          | String | Chave-primária   | ID da medida                    |
+| id          | Int    | Chave-primária   | ID da medida                    |
 | gauge       | String |                  | Nome da medida utilizada        |
 | description | String |                  | Detalhes sobre a medida         |
 | Recipe      |        | Chave-Secundária | Conexão com a tabela **Recipe** |
@@ -495,36 +495,14 @@ INSERT INTO "public"."Gauges" (gauge, description) VALUES ('cs', 'Colher(es) de 
 
 **Tabela Spice**
 
-| Campo       | Tipo   | Observações      | Descrição                       |
-| :---------- | ------ | ---------------- | ------------------------------- |
-| Id          | String | Chave-primária   | ID da medida                    |
-| gauge       | String |                  | Nome da medida utilizada        |
-| description | String |                  | Detalhes sobre a medida         |
-| Recipe      |        | Chave-Secundária | Conexão com a tabela **Recipe** |
-
-Na ferramenta **Query Tool** em seu pgAdmin cole a _query_ abaixo e execute:
-
-```
-INSERT INTO "public"."Ingredients" (name) VALUES ('Azeite de Dendê <3'),
-('Camarão'),
-('Caranguejo'),
-('Leite de Coco'),
-('Graviola'),
-('Mandioca'),
-('Milho'),
-('Carne Seca'),
-('Pequi'),
-('Arroz'),
-('Feijão'),
-('Ovo'),
-('Palmito'),
-('Banana'),
-('Batata'),
-('Fava'),
-('Lentilha'),
-('Couve'),
-('Reolho');
-```
+| Campo    | Tipo   | Observações            | Descrição                       |
+| :------- | ------ | ---------------------- | ------------------------------- |
+| id       | Int    | Chave-primária         | ID do tempero                   |
+| name     | String |                        | Nome do tempero                 |
+| quantity | Int    | Preenchimento opcional | Quantidade a ser utilizada      |
+| gaugeId  | Int    | Chave-Secundária       | Conexão com a tabela **Gauges** |
+| spicePic | String | Preenchimento opcional | Imagem do tempero               |
+| Recipe   |        | Chave-Secundária       | Conexão com a tabela **Recipe** |
 
 Na ferramenta **Query Tool** em seu pgAdmin cole a _query_ abaixo e execute:
 
@@ -548,6 +526,55 @@ INSERT INTO "public"."Spice" (name) VALUES ('Alho'),
 ('Pimenta-Calabresa'),
 ('Azeite');
 ```
+
+**Tabela Ingredients**
+
+| Campo         | Tipo   | Observações                               | Descrição                       |
+| :------------ | ------ | ----------------------------------------- | ------------------------------- |
+| id            | Int    | Chave-primária                            | ID do ingrediente               |
+| name          | String |                                           | Nome do ingrediente             |
+| quantity      | Int    | Preenchimento opcional                    | Quantidade a ser utilizada      |
+| gaugeId       | Int    | Chave-Secundária e preenchimento opcional | Conexão com a tabela **Gauges** |
+| ingredientPic | String | Preenchimento opcional                    | Imagem do ingrediente           |
+| Recipe        |        | Chave-Secundária                          | Conexão com a tabela **Recipe** |
+
+Na ferramenta **Query Tool** em seu pgAdmin cole a _query_ abaixo e execute:
+
+```
+INSERT INTO "public"."Ingredients" (name) VALUES ('Azeite de Dendê <3'),
+('Camarão'),
+('Caranguejo'),
+('Leite de Coco'),
+('Graviola'),
+('Mandioca'),
+('Milho'),
+('Carne Seca'),
+('Pequi'),
+('Arroz'),
+('Feijão'),
+('Ovo'),
+('Palmito'),
+('Banana'),
+('Batata'),
+('Fava'),
+('Lentilha'),
+('Couve'),
+('Repolho');
+```
+
+**Tabela Recipe**
+
+| Campo         | Tipo   | Observações            | Descrição                            |
+| :------------ | ------ | ---------------------- | ------------------------------------ |
+| id            | Int    | Chave-primária         | ID do prato/receita                  |
+| name          | String |                        | Nome do prato/receita                |
+| cuisineId     | Int    | Chave-Secundária       | Conexão com a tabela **Cuisine**     |
+| history       | String | Preenchimento opcional | História do prato/receita            |
+| ingredientsId | Int    | Chave-Secundária       | Conexão com a tabela **Ingredients** |
+| spiceId       | Int    | Chave-Secundária       | Conexão com a tabela **Spice**       |
+| prepTime      | String |                        | Tempo de preparo                     |
+| servings      | Int    |                        | Quantidade de porções                |
+| recipePic     | String | Preenchimento opcional | Imagem da receita                    |
 
 ## Autenticação e Autorização com Passport e JWT
 
