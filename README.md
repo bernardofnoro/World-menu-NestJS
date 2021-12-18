@@ -171,17 +171,32 @@ Em **Auth** realizamos o Login para utilizar o sistema.
 
 ## Entendendo um pouco de relacionamento
 
-(Não, não estamos falando daquele que deveria sério :laughing:)
+(Não, não estamos falando daquele que deveria ser sério :laughing:)
 
 ### Relação Um para Um
+
+Em uma relação **um para um**, um dado em uma tabela é associado a outro e **somente** outro dado em outra tabela.
+
+No exemplo abaixo, o campo **cuisineId** na tabela **Recipe** está associado ao campo **id** na tabela **Cuisine**.
+
+Este relacionamento retorna registros relacionados quando o valor dos campos é o mesmo, por exemplo:
+
+- Se o ID do país Brasil na tabela Cuisine for `1`, e;
+- O valor `1` também for preenchido no campo cuisineId na tabela Recipe
+
+A informação será corretamente carregada.
 
 ![one_to_one](misc/dbSchemas/one_to_one.png)
 
 ### Relação Um para Muitos
 
+Em um relacionamento de **um para muitos**, um **único registro** de uma tabela pode ser associado a **um ou mais registros** em outra tabela ou tabelas.
+
 ![one_to_many](misc/dbSchemas/one_to_many.png)
 
 ### Relação Muitos para Muitos
+
+Uma relação **muitos para muitos** acontece quando **vários registros** em uma tabela são associados a **vários registros** em outra tabela.
 
 ![many_to_many](misc/dbSchemas/many_to_many.png)
 
