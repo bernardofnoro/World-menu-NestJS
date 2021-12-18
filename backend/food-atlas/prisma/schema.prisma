@@ -31,6 +31,8 @@ model Gauges {
   id            Int         @id @default(autoincrement())
   gauge         String      @db.VarChar(50)
   description   String      @db.VarChar(50)
+  ingredientsId Int?
+  spiceId       Int?
   spice         Spice[]
   ingredient    Ingredients[]
   createdAt     DateTime    @default(now()) @map("created_at")
