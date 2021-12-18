@@ -624,6 +624,7 @@ Vamos criar tambem a pasta **dto** e dentro dela criamos o arquivo **login.dto.t
 Se você seguiu as instruções corretamente, sua estrutura de pastas deve parecer com a imagem abaixo:
 
 ![image-20211217214725372](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211217214725372.png)
+![jwt_01.png](misc/images/jwt_01.png)
 
 Vamos começar a construir nossa autenticação modificando os arquivos a seguir:
 
