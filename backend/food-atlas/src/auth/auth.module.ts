@@ -1,3 +1,4 @@
+
 /**
  * file: auth.module.ts
  * description: arquivo responsável pelos componentes que irão auxiliar o processo de Autenticação
@@ -22,7 +23,7 @@ import { PrismaService } from 'src/plugins/prisma/prisma.service';
       session: false,
     }),
     JwtModule.register({
-      secret: process.env.SECRETKEY,
+      secret: process.env.SECRETKEY, //Aqui é a secret key que precisa ser declarada no arquivo .ENV
       signOptions: {
         expiresIn: '300s', //Aqui é o tempo de duração do token de permissão.
       },

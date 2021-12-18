@@ -580,3 +580,167 @@ INSERT INTO "public"."Ingredients" (name) VALUES ('Azeite de Dendê <3'),
 
 (Isso certamente não é coisa de Deus! :fearful:)
 
+Primeiramente precisamos instalar algumas dependências antes de continuarmos com o processo de autenticação! 
+
+Abra o terminal do seu projeto e faça as instalações abaixo.
+
+> - npm install --save @nestjs/passport passport passport-local
+> - npm install --save-dev @types/passport-local
+> - npm install @nestjs/jwt 
+> - npm install bcrypt
+
+Agora precisamos criar a pasta "Auth" em nosso projeto.
+
+No terminal digite:
+
+```javascript
+nest g module auth 
+nest g service auth
+```
+
+Esses comandos criam o arquivo **auth.module.ts** e **auth.service.ts** dentro de uma pasta chamada **auth**.
+
+Vamos deixar nossa pasta pronta pra trabalhar criando os arquivos necessários para a nossa autenticação JWT!
+
+Dentro da pasta **auth**, crie um arquivo chamado **auth.controller.ts** e outro arquivo chamado **jwt.strategy.ts** .
+
+Vamos criar tambem a pasta **dto** e dentro dela criamos o arquivo **login.dto.ts** .
+
+Se você seguiu as instruções corretamente, sua estrutura de pastas deve parecer com a imagem abaixo:
+
+![image-20211217214725372](C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20211217214725372.png)
+
+Vamos começar a construir nossa autenticação modificando os arquivos a seguir:
+
+Em nossa API, o usuario **cadastrado** para ser **verificado** precisar informar 2(dois) requisitos: email e pass (abreviação de password).
+
+Então é justamente isso que vamos declarar no **login.dto.ts** :
+
+```typescript
+export class LoginDto {
+ email: string;
+ pass: string;
+}
+```
+
+No arquivo **auth.module.ts** vamos declarar os componentes que irão auxiliar no processo de autenticação :
+
+```typescript
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { PassportModule } from '@nestjs/passport';   // Atenção máxima aos imports necessários para a autenticação!
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
+import { UserService } from 'src/app/users/users.service';
+import { PrismaService } from 'src/plugins/prisma/prisma.service';
+
+@Module({
+ imports: [
+  PassportModule.register({
+   defaultStrategy: 'jwt',  // declarando que o JWT será nossa estratégia padrão de autenticação!
+   property: 'user',
+   session: false,
+  }),
+     
+  JwtModule.register({
+   secret: process.env.SECRETKEY, //Aqui é a secret key que precisa ser declarada no arquivo .ENV
+   signOptions: {
+​  expiresIn: '300s', //Aqui é o tempo de duração do token de permissão.
+   },
+  }),
+ ],
+
+ providers: [UserService, PrismaService, AuthService, JwtStrategy],
+ controllers: [AuthController],
+ exports: [PassportModule, JwtModule], //Não esquecer de exportar o jwt e passport modules!
+})
+export class AuthModule {}
+```
+
+Já no arquivo **auth.service.ts** vamos configurar a geração do **token** para o usuario:
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';                     //Atenção máxima aos imports necessários para geração do token!
+import { UserService } from 'src/app/users/users.service';
+import { LoginDto } from './dto/login.dto';  
+import { JwtPayload } from './jwt.strategy';
+
+@Injectable()
+export class AuthService {
+ constructor(
+  private readonly userService: UserService,
+  private readonly jwtService: JwtService,    //Declarando o jwt no constructor para a construção do Token!
+ ) {}
+
+ async login(loginUserDto: LoginDto) {
+  const user = await this.userService.findByLogin(loginUserDto); // findByLogin é função criada no arquivo users.controller                                                              
+ const token = this._createToken(user); // Função do token sendo chamada usando o email do usuario
+  return {
+   email: user.email,
+   ...token,
+  };
+ }
+ private _createToken({ email }: LoginDto): any {   // Criando a função de criação do token 
+  const user: JwtPayload = { email };
+  const accessToken = this.jwtService.sign(user); 
+  return {
+   expiresIn: process.env.EXPIRESIN, 
+   accessToken,                          
+  };
+ }
+}
+```
+
+Agora vamos ao arquivo **jwt.strategy.ts**, responsavel pela estratégia de autenticação, em nosso exemplo a informação crucial é o **email** do usuario!
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';   //Atenção máxima aos imports necessários para a estratégia!
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
+export interface JwtPayload {
+ email: string;  //Aqui é declarado a informação crucial para a autenticação.
+}
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+ constructor() {
+  super({
+   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+   secretOrKey: process.env.SECRETKEY,
+  });
+ }
+
+ validate(payload: JwtPayload) {
+  return payload;
+ }
+}
+```
+
+e pra finalizar nossa pasta **auth** o arquivo **auth.controller.ts** ,  responsavel pela configuração de navegação do usuario em nossa API!
+
+```typescript
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';           
+import { AuthService } from './auth.service';    // Atenção máxima aos imports necessários para a navegação do usuario na rota!
+import { LoginDto } from './dto/login.dto';
+
+@Controller('auth')
+export class AuthController {
+ constructor(private readonly authService: AuthService) {}
+
+ @Post()
+ async login(@Body() data: LoginDto) {
+  return this.authService.login(data);  //comparando se o que vem do Body está em nosso banco de dados atraves do authService!
+ }
+
+ @Get()
+ @UseGuards(AuthGuard()) // UseGuards protege a nossa rota! Voce só consegue acessar esse GET se estiver com um token valido!
+ async checkLogin() {
+  return 'PARABENS, SE VOCÊ ESTÁ LENDO ISSO, VOCÊ CONSEGUIU ACESSAR UMA ROTA PROTEGIDA!';
+ }
+}
+```
+
