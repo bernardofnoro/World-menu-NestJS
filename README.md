@@ -624,7 +624,7 @@ Vamos criar tambem a pasta **dto** e dentro dela criamos o arquivo **login.dto.t
 Se você seguiu as instruções corretamente, sua estrutura de pastas deve parecer com a imagem abaixo:
 
 
-![jwt_01.png](misc/images/jwt_01.png)
+![jwt_01.png](misc/images/jwt_00.png)
 
 Vamos começar a construir nossa autenticação modificando os arquivos a seguir:
 
@@ -642,10 +642,11 @@ export class LoginDto {
 No arquivo **auth.module.ts** vamos declarar os componentes que irão auxiliar no processo de autenticação :
 
 ```typescript
+// Atenção máxima aos imports necessários para a autenticação!
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { PassportModule } from '@nestjs/passport';   // Atenção máxima aos imports necessários para a autenticação!
+import { PassportModule } from '@nestjs/passport';   
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { UserService } from 'src/app/users/users.service';
@@ -654,7 +655,7 @@ import { PrismaService } from 'src/plugins/prisma/prisma.service';
 @Module({
  imports: [
   PassportModule.register({
-   defaultStrategy: 'jwt',  // declarando que o JWT será nossa estratégia padrão de autenticação!
+   defaultStrategy: 'jwt', // declarando que o JWT será nossa estratégia padrão de autenticação!
    property: 'user',
    session: false,
   }),
@@ -677,8 +678,9 @@ export class AuthModule {}
 Já no arquivo **auth.service.ts** vamos configurar a geração do **token** para o usuario:
 
 ```typescript
+//Atenção máxima aos imports necessários para geração do token!
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';                     //Atenção máxima aos imports necessários para geração do token!
+import { JwtService } from '@nestjs/jwt';                     
 import { UserService } from 'src/app/users/users.service';
 import { LoginDto } from './dto/login.dto';  
 import { JwtPayload } from './jwt.strategy';
@@ -687,7 +689,7 @@ import { JwtPayload } from './jwt.strategy';
 export class AuthService {
  constructor(
   private readonly userService: UserService,
-  private readonly jwtService: JwtService,    //Declarando o jwt no constructor para a construção do Token!
+  private readonly jwtService: JwtService, //Declarando o jwt no constructor para a construção do Token!
  ) {}
 
  async login(loginUserDto: LoginDto) {
@@ -698,7 +700,7 @@ export class AuthService {
    ...token,
   };
  }
- private _createToken({ email }: LoginDto): any {   // Criando a função de criação do token 
+ private _createToken({ email }: LoginDto): any { // Criando a função de criação do token 
   const user: JwtPayload = { email };
   const accessToken = this.jwtService.sign(user); 
   return {
@@ -712,12 +714,13 @@ export class AuthService {
 Agora vamos ao arquivo **jwt.strategy.ts**, responsavel pela estratégia de autenticação, em nosso exemplo a informação crucial é o **email** do usuario!
 
 ```typescript
+//Atenção máxima aos imports necessários para a estratégia!
 import { Injectable } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';   //Atenção máxima aos imports necessários para a estratégia!
+import { PassportStrategy } from '@nestjs/passport';   
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export interface JwtPayload {
- email: string;  //Aqui é declarado a informação crucial para a autenticação.
+ email: string; //Aqui é declarado a informação crucial para a autenticação.
 }
 
 @Injectable()
@@ -738,9 +741,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 e pra finalizar nossa pasta **auth** o arquivo **auth.controller.ts** ,  responsavel pela configuração de navegação do usuario em nossa API!
 
 ```typescript
+// Atenção máxima aos imports necessários para a navegação do usuario na rota!
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';           
-import { AuthService } from './auth.service';    // Atenção máxima aos imports necessários para a navegação do usuario na rota!
+import { AuthService } from './auth.service';    
 import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
@@ -749,14 +753,64 @@ export class AuthController {
 
  @Post()
  async login(@Body() data: LoginDto) {
-  return this.authService.login(data);  //comparando se o que vem do Body está em nosso banco de dados atraves do authService!
+  return this.authService.login(data); //comparando se o que vem do Body está em nosso banco de dados atraves do authService!
  }
 
  @Get()
- @UseGuards(AuthGuard()) // UseGuards protege a nossa rota! Voce só consegue acessar esse GET se estiver com um token valido!
+ @UseGuards(AuthGuard()) //UseGuards protege a nossa rota! Voce só consegue acessar esse GET se estiver com um token valido!
  async checkLogin() {
   return 'PARABENS, SE VOCÊ ESTÁ LENDO ISSO, VOCÊ CONSEGUIU ACESSAR UMA ROTA PROTEGIDA!';
  }
 }
 ```
+
+Com tudo configurado, vamos testar nossa autenticação! 😁
+
+Estamos usando a extensão do Vscode chamada **ThunderClient** , mas você pode testar as rotas com o programa que preferir! 
+
+### Passo 1: Cadastrar um novo usuário em nossa API
+
+Na rota **/users** vamos usar o método **[POST]** para cadastrar um <u>email e senha</u> para o novo usuário: 
+
+![jwt_05.png](misc/images/jwt_05.png)
+
+Se tudo estiver correto, a resposta deve vir assim:
+
+![jwt_02.png](misc/images/jwt_02.png)
+
+#### *Importante!*
+
+Note que a senha que aparece como cadastrada é uma string cheia de números e letras, bem complexo de lembrar! Mas isso é o **BCRYPT** em ação!
+
+Ele impede que a senha que nós realmente digitamos seja salva, sem nenhum tipo de proteção, no banco de dados! O **Bcrypt** cuida da criptografia da nossa senha!
+
+### Passo 2:  Usar nosso usuário cadastrado para conseguir um token de autenticação!
+
+Agora que temos um usuário cadastrado, vamos acessar a rota /auth e usar nosso email e senha cadastrados !
+
+Se os dados informados baterem com o que está salvo no banco de dados, o **thunder client** nos retornará a seguinte mensagem:
+
+![jwt_06.png](misc/images/jwt_06.png)
+
+![jwt_01.png](misc/images/jwt_01.png)
+
+Conseguimos fazer nossa autenticação! Recebemos nosso **token**! Lembrando que em nosso código nós configuramos que ele dure apenas 300 segundos (5 minutos)! Ou seja, após esse tempo, o token expira e tudo que estiver protegido em nossa API nós não teremos mais acesso!
+
+### Passo 3 :  Usando o token para acessar rotas protegidas!
+
+Vamos tentar acessar uma rota protegida?
+
+Nessa API criamos uma rota simples que está protegida, ou seja, você só consegue acessar com um token! Mas não demore muito lembre-se que temos apenas 5 minutos !
+
+Vamos lá , na mesma rota **/auth** agora vamos testar o método **[GET]**
+
+![jwt_04.png](misc/images/jwt_04.png)
+
+No Thunder Client temos que informar o nosso token, por isso adicione o token no campo acima e tente acessar a rota!
+
+Se tudo estiver correto, a mensagem abaixo deve aparecer!
+
+![jwt_07.png](misc/images/jwt_07.png)
+
+Parabéns! Se você  chegou até aqui , conseguiu concluir com sucesso a implementação do JWT no seu projeto! 😎
 
